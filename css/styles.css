@@ -374,17 +374,17 @@ a.navbar-brand{
   margin-right: 15px;
 }
 
-#depoimento1 .imagem-depoimento{
+#depoimento-1 .imagem-depoimento{
   background-image: url("../img/diego.jpg");
   background-size: cover;
 }
 
-#depoimento2 .imagem-depoimento{
+#depoimento-2 .imagem-depoimento{
   background-image: url("../img/ana.jpg");
   background-size: cover;
 }
 
-#depoimento3 .imagem-depoimento{
+#depoimento-3 .imagem-depoimento{
   background-image: url("../img/joao.jpg");
   background-size: cover;
 }
@@ -549,7 +549,7 @@ footer{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 20px;
+  padding-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--color-separete);
 }
@@ -748,5 +748,24 @@ select.form-control{
 
 .toast.green {
   background-color: var(--color-green);
+}
+
+.carrinho-vazio{
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.carrinho-vazio i{
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-secundary);
+  color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  border-radius: 50px;
+  margin-bottom: 10px;
 }
 
