@@ -468,6 +468,63 @@ footer{
   justify-content: end;
 }
 
+.modal-adicionais {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 0px 20px 0px 20px;
+  border: 1px solid #888;
+  max-height: 80%;
+  height: 100%;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close-modal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: tomato;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modalAdicionaisLista {
+  margin-top: 10px;
+  width: 100%;
+}
+
+#modalAdicionaisLista label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.check-input{
+  transform: scale(2.0);
+}
+
 .modal-full{
   position: fixed;
   top: 0;
@@ -768,4 +825,3 @@ select.form-control{
   border-radius: 50px;
   margin-bottom: 10px;
 }
-

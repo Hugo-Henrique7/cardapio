@@ -4,10 +4,12 @@ $(document).ready(function () {
 
 var cardapio = {};
 var MEU_CARRINHO = [];
+var ADICIONAIS = [];
+var ITEMIDATUAL = null;
 var MEU_ENDERECO = null;
 var VALOR_CARRINHO = 0;
 var VALOR_ENTREGA = 5;
-var CELULAR_EMPRESA = "5599981470591"
+var CELULAR_EMPRESA = "5599981969893"
 
 cardapio.eventos = {
   init: () => {
@@ -19,13 +21,18 @@ cardapio.eventos = {
 
 cardapio.metodos = {
   // Obtém a lista de itens do cardápio
-  obterItensCardapio: (categoria = 'burgers', vermais = false) => {
+  obterItensCardapio: (categoria = 'Shawarma', vermais = false) => {
     var filtro = MENU[categoria];
     console.log(filtro);
 
     if (!vermais) {
       $("#itensCardapio").html('');
-      $("#btnVerMais").removeClass("hidden");
+
+      if(filtro.length > 8){
+        $("#btnVerMais").removeClass("hidden");
+      }else{
+        $("#btnVerMais").addClass("hidden");
+      }
     }
 
     $.each(filtro, (i, e) => {
@@ -79,11 +86,13 @@ cardapio.metodos = {
 
   //Adiciona ao Carrinho o item do cardápio
   adicionarAoCarrinho: (id) => {
+    id = ITEMIDATUAL;
+    console.log("Adicionando ao carrinho o item com ID:", id);
     let qntdAtual = parseInt($("#qntd-" + id).text());
-
+    console.log("Quantidade atual:", qntdAtual);
     if(qntdAtual > 0){
       var categoria = $(".container-menu a.active").attr("id").split("menu-")[1];
-
+      console.log("Categoria ativa:", categoria); 
       //obtem a lista de itens
       let filtro = MENU[categoria];
 
@@ -97,11 +106,13 @@ cardapio.metodos = {
         if(existe.length > 0){
           let objIndex = MEU_CARRINHO.findIndex((obj => obj.id == id));
           MEU_CARRINHO[objIndex].qntd += qntdAtual;
+          console.log("Quantidade atualizada no carrinho:", MEU_CARRINHO[objIndex].qntd);
         }
         // caso ainda não exista o item no carrinho, adiciona ele
         else{
           item[0].qntd = qntdAtual
           MEU_CARRINHO.push(item[0])
+          console.log("Item adicionado ao carrinho:", item[0]);
         }
         
         cardapio.metodos.mensagem("Item adicionado ao carrinho", "green")
@@ -110,6 +121,32 @@ cardapio.metodos = {
         cardapio.metodos.atualizarBadgeTotal();
       }
     }
+    cardapio.metodos.fecharModalAdicionais();
+  },
+
+  abrirModalAdicionais: (id) => {
+    console.log("Abrindo modal para o tem com ID:" + id)
+    let qntd = parseInt($("#qntd-" + id).text())
+    if(qntd > 0){
+      let adicionaisHtml = '';
+      $.each(MENU["Adicionais"], (i, e) => {
+        let temp = cardapio.templates.itemAdicional.replace(/\${nome}/g, e.name)
+          .replace(/\${preco}/g, e.price.toFixed(2).replace(".", ","))
+          .replace(/\${id}/g, e.id)
+        adicionaisHtml += temp;
+      })
+      $("#modalAdicionaisLista").html(adicionaisHtml);
+      $("#modalAdicionais").removeClass("hidden");
+      ITEMIDATUAL = id; // Armazena o ID do item atual
+    }else{
+      alert("Você ainda não escolheu a quantidade!!!")
+    }
+  },
+ 
+  fecharModalAdicionais: () => {
+    $("#modalAdicionais").addClass("hidden");
+    ITEMIDATUAL = null;
+    console.log("Fechando modal de adicionais")
   },
 
   //Atualizar o badge de totals dos botões "Meu carrinho"
@@ -143,7 +180,7 @@ cardapio.metodos = {
       $("#modalcarrinho").addClass("hidden");
     }
   },
-
+  
   //Altera os textos e exibe botões das etapas
   carregarEtapa: (etapa) => {
     if(etapa == 1){
@@ -512,10 +549,20 @@ cardapio.templates = {
         <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
         <span class="add-numero-itens" id="qntd-\${id}">0</span>
         <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
-        <span class="btn btn-add" onclick="cardapio.metodos.adicionarAoCarrinho('\${id}')"><i class="fa fa-shopping-bag"></i></span>
+        <span class="btn btn-add" onclick="cardapio.metodos.abrirModalAdicionais('\${id}')"><i class="fa fa-shopping-bag"></i></span>
       </div>
     </div>
   </div>
+  `,
+
+  itemAdicional:`
+    <div class="d-flex justify-content-between align-items-center border-bottom adicional-item">
+      <label class="d-flex flex-column" for="\${id}">
+        <span><strong>\${nome}</strong></span>
+        <small>&#43;\${preco}</small>
+      </label>
+      <input class="bg-tertiary check-input" type="checkbox" name="\${id}" id="\${id}">
+    </div>
   `,
 
   itemCarrinho: `
@@ -551,6 +598,7 @@ cardapio.templates = {
         <p class="quantidade-produto-resumo">
           x <b>\${qntd}</b>
         </p>
+        <small>Bacon, Catupiry</small>
       </div>
    `
 };

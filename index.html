@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Restaurante - Seja bem-vindo!</title>
+  <title>King Shawarma - Seja bem-vindo!</title>
   <link rel="stylesheet" href="./css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/fontawesome.css">
   <link rel="stylesheet" href="css/animate.css">
@@ -23,7 +23,7 @@
     <div class="container">
       <nav class="navbar navbar-expand-lg pl-0 pr-0 col-one">
         <a href="#" class="navbar-brand wow fadeIn">
-          <img src="./img/logo.png" width="160" class="img-logo">
+          <img src="./img/logoShawarma.jpg" width="160" class="img-logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
           <span class="navbar-toggler-icon">
@@ -61,7 +61,7 @@
       <div class="row">
         <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-one">
           <div class="d-flex text-banner">
-            <h1 class="wow fadeInLeft"><b>Escolha sua comida <b class="color-primary">favorita.</b></b></h1>
+            <h1 class="wow fadeInLeft"><b>Escolha seu <b class="color-primary">Shawarma </b>favorito.</b></h1>
             <p class="wow fadeInLeft delay-02s">
               Aproveite nosso cardápio! Escolha o que desejar e receba em sua casa de forma rápida e segura.
             </p>
@@ -73,7 +73,7 @@
                 <span class="icon-left">
                   <i class="fa fa-phone"></i>
                 </span>
-                (73) 99931-2750
+                (99) 98196-9893
               </a>
             </div>
           </div>
@@ -163,20 +163,23 @@
         </div>
 
         <div class="col-12 col-one container-menu wow fadeInUp">
-          <a id="menu-burgers" class="btn btn-white btn-sm mr-3 active" onclick="cardapio.metodos.obterItensCardapio('burgers')">
-            <i class="fas fa-hamburger"></i>&nbsp; Burgers
+          <a id="menu-Shawarma" class="btn btn-white btn-sm mr-3 active" onclick="cardapio.metodos.obterItensCardapio('Shawarma')">
+            <i class="fas fa-hamburger"></i>&nbsp; Shawarma
           </a>
-          <a id="menu-pizzas" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('pizzas')">
-            <i class="fas fa-pizza-slice"></i>&nbsp; Pizzas
+          <a id="menu-Combo-Shawarma" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('Combo-Shawarma')">
+            <i class="fas fa-pizza-slice"></i>&nbsp; Combo Shawarma
           </a>
-          <a id="menu-steaks" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('steaks')">
-            <i class="fas fa-bacon"></i>&nbsp; Steaks
+          <a id="menu-Shawarma-Prime" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('Shawarma-Prime')">
+            <i class="fas fa-bacon"></i>&nbsp; Prime
           </a>
-          <a id="menu-bebidas" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('bebidas')">
+          <a id="menu-Combo-Prime" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('Combo-Prime')">
+            <i class="fas fa-bacon"></i>&nbsp; Combo Prime
+          </a>
+          <a id="menu-Bebidas" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('Bebidas')">
             <i class="fas fa-cocktail"></i>&nbsp; Bebidas
           </a>
-          <a id="menu-sobremesas" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('sobremesas')">
-            <i class="fas fa-ice-cream"></i>&nbsp; Sobremesas
+          <a id="menu-Acompanhamentos" class="btn btn-white btn-sm mr-3" onclick="cardapio.metodos.obterItensCardapio('Acompanhamentos')">
+            <i class="fas fa-ice-cream"></i>&nbsp; Acompanhamentos
           </a>
         </div>
         
@@ -337,13 +340,13 @@
           </p>
         </div>
         <div class="col-12 col-lg-3 col-md-3 col-sm-12 col-one container-redes-footer wow fadeIn">
-          <a class="btn btn-sm btn-white btn-social mr-3">
+          <a href="https://www.instagram.com/kingshawarma_bdc/" class="btn btn-sm btn-white btn-social mr-3">
             <i class="fab fa-instagram"></i>
           </a>
           <a class="btn btn-sm btn-white btn-social mr-3">
             <i class="fab fa-facebook-f"></i>
           </a>
-          <a class="btn btn-sm btn-white btn-social">
+          <a href="" class="btn btn-sm btn-white btn-social">
             <i class="fab fa-whatsapp"></i>
           </a>
         </div>
@@ -517,7 +520,17 @@
       </div>
     </div>
   </div>
-  
+
+
+<div class="modal-adicionais hidden" id="modalAdicionais">
+  <div class="modal-content">
+    <span class="close-modal" onclick="cardapio.metodos.fecharModalAdicionais()">&times;</span>
+    <h2 id="modalTitulo">Adicionais</h2>
+    <div class="mb-3" id="modalAdicionaisLista">
+    </div>
+    <button class="btn btn-yellow" onclick="cardapio.metodos.adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+  </div>
+</div>
   <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
   <script type="text/javascript" src="./js/modernizr-3.5.0.min.js"></script>
   <script type="text/javascript" src="./js/bootstrap.min.js"></script>
@@ -525,7 +538,6 @@
   <script type="text/javascript" src="./js/wow.min.js"></script>
   <script type="text/javascript" src="./js/dados.js"></script>
   <script type="text/javascript" src="./js/app.js"></script>
-
   <script>new WOW().init();</script>
 </body>
 </html>
