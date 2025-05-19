@@ -4,12 +4,12 @@ $(document).ready(function () {
 
 var cardapio = {};
 var MEU_CARRINHO = [];
+var ITEM_ATUAL_ID = []
 var ADICIONAIS = [];
-var ITEMIDATUAL = null;
 var MEU_ENDERECO = null;
 var VALOR_CARRINHO = 0;
 var VALOR_ENTREGA = 5;
-var CELULAR_EMPRESA = "5599981969893"
+var CELULAR_EMPRESA = "559981218815"
 
 cardapio.eventos = {
   init: () => {
@@ -21,9 +21,8 @@ cardapio.eventos = {
 
 cardapio.metodos = {
   // Obtém a lista de itens do cardápio
-  obterItensCardapio: (categoria = 'Shawarma', vermais = false) => {
+  obterItensCardapio: (categoria = 'Salgados', vermais = false) => {
     var filtro = MENU[categoria];
-    console.log(filtro);
 
     if (!vermais) {
       $("#itensCardapio").html('');
@@ -42,7 +41,7 @@ cardapio.metodos = {
                                         .replace(/\${id}/g, e.id);
 
       // Botão "Ver Mais" foi clicado (12 itens)
-      if (vermais && i >= 8 && i < 12) {
+      if (vermais && i >= 8 && i < 18) {
         $("#itensCardapio").append(temp);
       }
 
@@ -69,7 +68,6 @@ cardapio.metodos = {
   // Diminuir a quantidade do item no cardápio
   diminuirQuantidade: (id) => {
     let qntdAtual = parseInt($("#qntd-" + id).text());
-
     if (qntdAtual > 0) {
       $("#qntd-" + id).text(qntdAtual - 1);
     }
@@ -78,15 +76,223 @@ cardapio.metodos = {
   // Aumentar a quantidade do item no cardápio
   aumentarQuantidade: (id) => {
     let qntdAtual = parseInt($("#qntd-" + id).text());
-
     if (qntdAtual >= 0) {
       $("#qntd-" + id).text(qntdAtual + 1);
     }
   },
 
+  openInfoProduct: (id) => {
+    $(".infoProduct").removeClass("hidden")
+    ITEM_ATUAL_ID.push(id)
+    let itemEncontrado = null;
+    let isBolo = false
+    let isCento = false
+    $.each(MENU, (categoria, itens) => {
+      $.each(itens, (i, e) => {
+        if(e.id === id){
+          itemEncontrado = e;
+          if(categoria === "Bolos") isBolo = true;
+          if(categoria === "CentoSalgados" || categoria === "CentoDoces") isCento = true;
+          return false
+        }
+      })
+      if(itemEncontrado){
+        return false
+      }
+    })
+    if(itemEncontrado){
+      $("#info-product-img").css(({
+        "background-image": `url(${itemEncontrado.img})`,
+        "background-size": "cover",
+        "background-position": "center",
+        "background-repeat": "no-repeat",
+        "width": "90%",
+        "height": "90%"
+      }))
+      $(".info-product-price").text("R$ " + itemEncontrado.price.toFixed(2));
+      let tempButtons = cardapio.templates.buttonsItem.replace(/\${id}/g, itemEncontrado.id)
+      $(".info-product-qntd").html(tempButtons)
+      if(isBolo){
+        cardapio.metodos.pegarTemplateBolo()
+        $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
+           cardapio.metodos.adicionarBoloAoCarrinho();
+        });
+        $(".info-product-qntd").addClass("hidden");
+        $(".btn-adiconar-info").addClass("centralizar-bolo");
+      }else if(isCento){
+        cardapio.metodos.pegarTemplateCento(itemEncontrado)
+        $(".info-product-qntd").removeClass("hidden");
+        $(".btn-adiconar-info").removeClass("centralizar-bolo");
+        $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
+          cardapio.metodos.adicionarAoCarrinho();
+        });
+      }
+      else {
+        let item = `
+          <h2 class="info-product-name">${itemEncontrado.name}</h2>
+          ${itemEncontrado.dsc ? `<p class="info-product-dsc">${itemEncontrado.dsc}</p>` : false}
+          <span>Alguma Observação:</span>
+          <textarea name="observacao" id="observacao" maxlength="200"></textarea>
+        `
+        $(".info-product-qntd").removeClass("hidden");
+        $(".btn-adiconar-info").removeClass("centralizar-bolo");
+        $(".content-scrollable").html(item)
+        $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
+          cardapio.metodos.adicionarAoCarrinho();
+        });
+      }
+    }
+  },
+
+  pegarTemplateBolo: () => {
+      let recheiosTradiconais = MENU["BoloRecheiosTradicionais"]
+      let recheios = MENU["BoloRecheios"]
+      let decoracao = MENU["Decoracao"]
+      $(".content-scrollable").html("");
+      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Recheios Tradicionais</strong></div>`);
+      $.each(recheiosTradiconais, (i, e) => {
+      let temp = cardapio.templates.recheiosTradiconais.replace(/\${nometradicional}/g, e.name)
+                                                        .replace(/\${precotradicional}/g, e.price.toFixed(2).replace('.', ','))
+                                                        .replace(/\${id}/g, e.id);
+
+      $(".content-scrollable").append(temp);
+      })
+
+      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Recheios</strong></div>`);
+      $.each(recheios, (i, e) => {
+      let temp = cardapio.templates.recheios.replace(/\${nomerecheio}/g, e.name)
+                                            .replace(/\${precorecheio}/g, e.price.toFixed(2).replace('.', ','))
+                                            .replace(/\${id}/g, e.id);
+
+      $(".content-scrollable").append(temp);
+      })
+
+      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Decorações</strong></div>`);
+      $.each(decoracao, (i, e) => {
+      let temp =  cardapio.templates.decoracao.replace(/\${nomedecoracao}/g, e.name)
+                                              .replace(/\${precodecoracao}/g, e.price.toFixed(2).replace('.', ','))
+                                              .replace(/\${id}/g, e.id);
+
+      $(".content-scrollable").append(temp);
+      })
+  },
+
+  itensBolosSelecionados: () => {
+    let boloItens = [];
+    
+    // Recheios Tradicionais
+    $(".recheiotradicionais input[type='checkbox']:checked").each(function() {
+        let id = $(this).attr("id");
+        let adicional = MENU["BoloRecheiosTradicionais"].find(a => a.id === id);
+        if (adicional) {
+            boloItens.push({
+                name: adicional.name,
+                price: adicional.price
+            });
+        }
+    });
+
+    // Recheios Normais
+    $(".recheios input[type='checkbox']:checked").each(function() {
+        let id = $(this).attr("id");
+        let adicional = MENU["BoloRecheios"].find(a => a.id === id);
+        if (adicional) {
+            boloItens.push({
+                name: adicional.name,
+                price: adicional.price
+            });
+        }
+    });
+
+    // Decorações
+    $(".decoracao input[type='checkbox']:checked").each(function() {
+        let id = $(this).attr("id");
+        let adicional = MENU["Decoracao"].find(a => a.id === id);
+        if (adicional) {
+            boloItens.push({
+                name: adicional.name,
+                price: adicional.price
+            });
+        }
+    });
+    return boloItens
+  },
+
+  controlItensBolo: () => {
+    const LIMITE_SELECTS = 2;
+    
+    $(document).off("change", ".recheio-select").on("change", ".recheio-select", function () {
+      let totalSelecionados = $(".recheio-select:checked").length;
+
+      if (totalSelecionados >= LIMITE_SELECTS) {
+        $(".recheio-select:not(:checked)").prop("disabled", true).addClass("checkbox-desativado");
+      } else {
+        $(".recheio-select").prop("disabled", false).removeClass("checkbox-desativado");
+      }
+    });
+  },
+
+  pegarTemplateCento: (item) => {
+    let itensCento = item.dsc.split(',');
+    let html = `
+      <h2 class="info-product-name">${item.name}</h2>
+        <div class="itens-cento-container">
+            <h4>Itens inclusos:</h4>
+            <ul class="list-itens-cento">
+    `;
+    
+    
+    $.each(itensCento, (i, item) => {
+        html += `<li>${item.trim()}</li>`;
+    });
+    
+    html += `
+            </ul>
+        </div>
+        <span>Alguma Observação:</span>
+        <textarea name="observacao" id="observacao" maxlength="200"></textarea>
+    `;
+
+    //$(".info-product-price").text("R$ " + item.price.toFixed(2));
+    $(".content-scrollable").html(html);
+  },
+
+  updateTotal: () => {
+
+  },
+
+  closeInfoProduct: () => {
+    $(".infoProduct").addClass("hidden")
+    ITEM_ATUAL_ID = []
+  },
+
+  adicionarBoloAoCarrinho: () => {
+    let id = ITEM_ATUAL_ID;
+    let adicionaisBolo = cardapio.metodos.itensBolosSelecionados()
+    let totalAdicionais = adicionaisBolo.reduce((soma, atual) => soma + atual.price, 0);
+    let categoria = $(".container-menu a.active").attr("id").split("menu-")[1];
+    let filtro = MENU[categoria]
+
+    let item = filtro.find(e => e.id == id);
+    console.log(`Pasou aqui ${item}`)
+
+    let newBolo ={
+      id: item.id,
+      name: item.name,
+      qntd: 1,
+      price: totalAdicionais,
+      img: item.img
+    }
+
+    MEU_CARRINHO.push(newBolo)
+    console.log("Bolo adicionado ao carrinho:", newBolo);
+    cardapio.metodos.atualizarBadgeTotal();
+    cardapio.metodos.closeInfoProduct();
+  },
+
   //Adiciona ao Carrinho o item do cardápio
-  adicionarAoCarrinho: (id) => {
-    id = ITEMIDATUAL;
+  adicionarAoCarrinho: () => {
+    id = ITEM_ATUAL_ID;
     console.log("Adicionando ao carrinho o item com ID:", id);
     let qntdAtual = parseInt($("#qntd-" + id).text());
     console.log("Quantidade atual:", qntdAtual);
@@ -121,32 +327,7 @@ cardapio.metodos = {
         cardapio.metodos.atualizarBadgeTotal();
       }
     }
-    cardapio.metodos.fecharModalAdicionais();
-  },
-
-  abrirModalAdicionais: (id) => {
-    console.log("Abrindo modal para o tem com ID:" + id)
-    let qntd = parseInt($("#qntd-" + id).text())
-    if(qntd > 0){
-      let adicionaisHtml = '';
-      $.each(MENU["Adicionais"], (i, e) => {
-        let temp = cardapio.templates.itemAdicional.replace(/\${nome}/g, e.name)
-          .replace(/\${preco}/g, e.price.toFixed(2).replace(".", ","))
-          .replace(/\${id}/g, e.id)
-        adicionaisHtml += temp;
-      })
-      $("#modalAdicionaisLista").html(adicionaisHtml);
-      $("#modalAdicionais").removeClass("hidden");
-      ITEMIDATUAL = id; // Armazena o ID do item atual
-    }else{
-      alert("Você ainda não escolheu a quantidade!!!")
-    }
-  },
- 
-  fecharModalAdicionais: () => {
-    $("#modalAdicionais").addClass("hidden");
-    ITEMIDATUAL = null;
-    console.log("Fechando modal de adicionais")
+    cardapio.metodos.closeInfoProduct();
   },
 
   //Atualizar o badge de totals dos botões "Meu carrinho"
@@ -263,7 +444,7 @@ cardapio.metodos = {
       })
     }else{$("#itensCarrinho").html('<p class="carrinho-vazio"><i class="fa fa-shopping-bag"></i> Seu Carrinho está vazio</p>')
       
-    }
+    } 
   },
 
   //Diminuir Quantidade do Item no carrinho
@@ -297,7 +478,6 @@ cardapio.metodos = {
 
   //Atualiza o carrinho com a quantidade atual
   atualizarCarrinho: (id, qntd) => {
-
     let objIndex = MEU_CARRINHO.findIndex((obj => obj.id == id))
     MEU_CARRINHO[objIndex].qntd = qntd;
 
@@ -325,7 +505,6 @@ cardapio.metodos = {
         $("#lblValorTotal").text(`R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace(".", ",")}`);
       }
     })
-    
   },
 
   carregarEndereco: () => {
@@ -546,22 +725,51 @@ cardapio.templates = {
         <b>\${preco}</b>
       </p>
       <div class="add-carrinho">
-        <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
-        <span class="add-numero-itens" id="qntd-\${id}">0</span>
-        <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
-        <span class="btn btn-add" onclick="cardapio.metodos.abrirModalAdicionais('\${id}')"><i class="fa fa-shopping-bag"></i></span>
+        <span class="btn btn-add" onclick="cardapio.metodos.openInfoProduct('\${id}')">Eu quero</span>
       </div>
     </div>
   </div>
   `,
 
-  itemAdicional:`
-    <div class="d-flex justify-content-between align-items-center border-bottom adicional-item">
-      <label class="d-flex flex-column" for="\${id}">
-        <span><strong>\${nome}</strong></span>
-        <small>&#43;\${preco}</small>
-      </label>
-      <input class="bg-tertiary check-input" type="checkbox" name="\${id}" id="\${id}">
+  buttonsItem: `
+    <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
+    <span class="add-numero-itens" id="qntd-\${id}">0</span>
+    <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
+  `,
+
+  recheiosTradiconais: `
+    <div class="recheiotradicionais bolo-recheios mt-0">
+      <div class="d-flex justify-content-between align-items-center border-bottom adicional-item">
+        <label class="d-flex flex-column" for="\${idtradicional}">
+          <span><strong>\${nometradicional}</strong></span>
+          <small class="price-adicional">&#43;\${precotradicional}</small>
+        </label>
+        <input class="bg-tertiary check-input recheio-select" type="checkbox" name="\${id}" id="\${id}">
+      </div>
+    </div>
+  `,
+
+  recheios: `
+    <div class="recheios bolo-recheios">
+        <div class="d-flex justify-content-between align-items-center border-bottom adicional-item">
+          <label class="d-flex flex-column" for="\${idrecheio}">
+            <span><strong>\${nomerecheio}</strong></span>
+            <small class="price-adicional">&#43;\${precorecheio}</small>
+          </label>
+          <input class="bg-tertiary check-input recheio-select" type="checkbox" name="\${id}" id="\${id}">
+        </div>
+      </div>
+  `,
+
+  decoracao: `
+    <div class="decoracao">
+      <div class="d-flex justify-content-between align-items-center border-bottom adicional-item">
+        <label class="d-flex flex-column" for="\${iddecoracao}">
+          <span><strong>\${nomedecoracao}</strong></span>
+          <small class="price-adicional">&#43;\${precodecoracao}</small>
+        </label>
+        <input class="bg-tertiary check-input" type="checkbox" name="\${iddecoracao}" id="\${id}">
+      </div>
     </div>
   `,
 
@@ -572,7 +780,7 @@ cardapio.templates = {
       </div>
       <div class="dados-produto">
         <p class="title-produto"><b>\${nome}</b></p>
-        <p class="price-produto"><b>\${nome}</b></p>
+        <p class="price-produto"><b>\${preco}</b></p>
       </div>
       <div class="add-carrinho">
       <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeCarrinho('\${id}')"><i class="fas fa-minus"></i></span>
@@ -582,6 +790,7 @@ cardapio.templates = {
       </div>
     </div>
   `,
+
    itemResumo: `
       <div class="col-12 item-carrinho resumo">
         <div class="img-produto-resumo">
@@ -598,7 +807,13 @@ cardapio.templates = {
         <p class="quantidade-produto-resumo">
           x <b>\${qntd}</b>
         </p>
-        <small>Bacon, Catupiry</small>
       </div>
    `
 };
+
+/*
+<span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
+        <span class="add-numero-itens" id="qntd-\${id}">0</span>
+        <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
+        fa fa-shopping-bag
+*/

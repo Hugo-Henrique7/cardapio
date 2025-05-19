@@ -7,9 +7,9 @@
   font-family: 'PoppinsRegular';
   src: url('../fonts/Poppins-Regular.otf');
 }
-
+/*d97706*/
 :root{
-  --color-background: #fffdf7;
+  --color-background: rgb(255, 251, 235);
   --color-black: #212121;
   --color-black-heavy: #000000;
   --color-text: #4f4f4f;
@@ -65,6 +65,10 @@ a.navbar-brand{
 
 .btn-white:active, .btn-white:hover{
   background-color: var(--color-primary);
+}
+
+.header{
+  background-color: var(--color-white);
 }
 
 .btn-icon{
@@ -160,6 +164,80 @@ a.navbar-brand{
   right: 15px;
 }
 
+.hero-section {
+  position: relative;
+  background-image: url('/img/carousel1img.png');
+  background-size: cover;
+  background-position: center;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  text-align: left;
+  margin-left: 100px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.btn-pedido {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: orange;
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-pedido:hover {
+  background-color: darkorange;
+}
+
+@media (max-width: 768px) {
+  .hero-section{
+    height: 60vh;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .btn-pedido {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+
 .card{
   border-radius: 20px;
   padding: 15px 20px;
@@ -185,8 +263,8 @@ a.navbar-brand{
 }
 
 .servicos{
-  padding-top: 100px;
-  padding-bottom: 150px;
+  background-color: var(--color-white);
+  width: 100vw;
 }
 
 .hint-title{
@@ -348,6 +426,9 @@ a.navbar-brand{
 }
 
 .card-depoimentos{
+  background-image: url("../img/carddepoimentos.jpg");
+  background-position: center;
+  background-size: cover;
   height: 390px;
   width: 390px;
   border-radius: 120px;
@@ -468,7 +549,7 @@ footer{
   justify-content: end;
 }
 
-.modal-adicionais {
+.infoProduct {
   display: flex;
   position: fixed;
   z-index: 1000;
@@ -481,21 +562,91 @@ footer{
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
-  background-color: #fff;
-  margin: 5% auto;
-  padding: 0px 20px 0px 20px;
-  border: 1px solid #888;
-  max-height: 80%;
-  height: 100%;
-  width: 70%;
+.detalhes-product{
+  width: 100%;
+  height: 50px;
   display: flex;
-  justify-content: center;
-  border-radius: 10px;
-  position: relative;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 
-.close-modal {
+.detalhes-product p {
+  margin: 0; /* Remove margens padrão do parágrafo */
+  flex-grow: 1; /* Ocupa o espaço disponível */
+  text-align: center; /* Centraliza o texto */
+}
+
+.detalhes-product span{
+  margin-left: 0;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  height: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.infoProduct-body{
+  background-color: #f3f4f6;
+  overflow-y: hidden;
+  overflow-y: scroll;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content-scrollable {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 15px;
+  border-radius: 20px 20px 0px 0px;
+  background-color: var(--color-white);
+}
+
+.info-product-name{
+  text-align: center;
+  font-size: 20px;
+  color: var(--color-primary);
+}
+
+#observacao{
+  width: 100%;
+  height: 100px;
+}
+
+.addProduct-btn{
+  padding: 15px;
+  border-top: 1px solid #eee;
+  background-color: var(--color-white);
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#container-img{
+ width: 50%;
+ background-color: white;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-right: 1px solid var(--color-separete);
+}
+
+#info-product-img {
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.closeInfoProduct{
   color: #aaa;
   float: right;
   font-size: 28px;
@@ -504,25 +655,39 @@ footer{
   width: fit-content;
 }
 
-.close-modal:hover,
-.close-modal:focus {
+.check-input{
+  transform: scale(2.0);
+}
+
+.titleAdicionalBolo{
+  background-color: rgb(243, 244, 246);
+  height: 60px;
+}
+
+.select-desativado {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.btn-adiconar-info{
+  display: flex;
+  width: 180px;
+  justify-content: space-between;
+  font-weight: 600;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.checkbox-desativado {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.closeInfoProduct:hover,
+.closeInfoProduct:focus {
   color: tomato;
   text-decoration: none;
   cursor: pointer;
-}
-
-#modalAdicionaisLista {
-  margin-top: 10px;
-  width: 100%;
-}
-
-#modalAdicionaisLista label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.check-input{
-  transform: scale(2.0);
 }
 
 .modal-full{
@@ -532,7 +697,7 @@ footer{
   left: 0;
   right: 0;
   padding: 50px;
-  background-color: var(--color-white);
+  background-color: var(--color-background);
   z-index: 9990;
   overflow-x: hidden;
   overflow-y: auto;
