@@ -9,7 +9,7 @@ var ADICIONAIS = [];
 var MEU_ENDERECO = null;
 var VALOR_CARRINHO = 0;
 var VALOR_ENTREGA = 5;
-var CELULAR_EMPRESA = "559981218815"
+var CELULAR_EMPRESA = "559981519060"
 
 cardapio.eventos = {
   init: () => {
@@ -281,7 +281,9 @@ cardapio.metodos = {
       name: item.name,
       qntd: 1,
       price: totalAdicionais,
-      img: item.img
+      img: item.img,
+      tipo: "bolo",
+      adicionais: adicionaisBolo
     }
 
     MEU_CARRINHO.push(newBolo)
@@ -421,31 +423,53 @@ cardapio.metodos = {
 
   //carrega a lista de itens do carrinho
   carregarCarrinho: () => {
+  cardapio.metodos.carregarEtapa(1);
 
-    cardapio.metodos.carregarEtapa(1)
+  if (MEU_CARRINHO.length > 0) {
+    $("#itensCarrinho").html("");
 
-    if(MEU_CARRINHO.length > 0){
+    $.each(MEU_CARRINHO, (i, e) => {
+      let adicionaisHtml = "";
+      let tempAdicionais = "";
 
-      $("#itensCarrinho").html("");
+      // Se o item for um bolo com adicionais
+      if (e.tipo === "bolo" && e.adicionais && e.adicionais.length > 0) {
+        // Cria os itens do dropdown
+        adicionaisHtml = e.adicionais.map(adicional => `
+          <li><a class="dropdown-item" href="#">${"+" + adicional.name + " R$" + adicional.price.toFixed(2).replace('.', ',')}</a></li>
+        `).join("");
 
-      $.each(MEU_CARRINHO, (i, e) => {
-        let temp = cardapio.templates.itemCarrinho.replace(/\${img}/g, e.img)
+        // Monta o dropdown com os adicionais
+        tempAdicionais = `
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+              Adicionais do Bolo
+            </button>
+            <ul class="dropdown-menu">
+              ${adicionaisHtml}
+            </ul>
+          </div>`;
+      }
+
+      // Renderiza o item no carrinho usando o template
+      let temp = cardapio.templates.itemCarrinho
+        .replace(/\${img}/g, e.img)
         .replace(/\${nome}/g, e.name)
         .replace(/\${preco}/g, e.price.toFixed(2).replace('.', ','))
         .replace(/\${id}/g, e.id)
-        .replace(/\${qntd}/g, e.qntd);
+        .replace(/\${qntd}/g, e.qntd)
+        .replace(/\${adicionais}/g, tempAdicionais); // Aqui entra o dropdown
 
-        $("#itensCarrinho").append(temp);
+      $("#itensCarrinho").append(temp);
 
-        // Último item
-        if((i + 1) == MEU_CARRINHO.length){
-          cardapio.metodos.carregarValores();
-        }
-      })
-    }else{$("#itensCarrinho").html('<p class="carrinho-vazio"><i class="fa fa-shopping-bag"></i> Seu Carrinho está vazio</p>')
-      
-    } 
-  },
+      if ((i + 1) === MEU_CARRINHO.length) {
+        cardapio.metodos.carregarValores();
+      }
+    });
+  } else {
+    $("#itensCarrinho").html('<p class="carrinho-vazio"><i class="fa fa-shopping-bag"></i> Seu Carrinho está vazio</p>');
+  }
+},
 
   //Diminuir Quantidade do Item no carrinho
   diminuirQuantidadeCarrinho: (id) => {
@@ -781,6 +805,9 @@ cardapio.templates = {
       <div class="dados-produto">
         <p class="title-produto"><b>\${nome}</b></p>
         <p class="price-produto"><b>\${preco}</b></p>
+        <div class="carrinho-item-adicionais">
+         \${adicionais}
+        </div>
       </div>
       <div class="add-carrinho">
       <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeCarrinho('\${id}')"><i class="fas fa-minus"></i></span>

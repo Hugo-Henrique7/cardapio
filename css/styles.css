@@ -68,7 +68,7 @@ a.navbar-brand{
 }
 
 .header{
-  background-color: var(--color-white);
+  background-color: var(--color-secundary);
 }
 
 .btn-icon{
@@ -263,8 +263,9 @@ a.navbar-brand{
 }
 
 .servicos{
-  background-color: var(--color-white);
+  background-color: var(--color-secundary);
   width: 100vw;
+  color: white;
 }
 
 .hint-title{
@@ -776,6 +777,12 @@ footer{
   border-bottom: 1px solid var(--color-separete);
 }
 
+.carrinho-item-adicionais{
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+}
+
 .modal-full .item-carrinho:last-child{
   border-bottom: none;
 }
@@ -946,7 +953,7 @@ select.form-control{
   color: var(--color-black-heavy)!important;
   border-radius: 50px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 99;
 }
 
 .container_mensagens{
