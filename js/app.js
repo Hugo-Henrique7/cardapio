@@ -123,6 +123,7 @@ cardapio.metodos = {
         cardapio.metodos.pegarTemplateCento(itemEncontrado)
         $(".info-product-qntd").removeClass("hidden");
         $(".btn-adiconar-info").removeClass("centralizar-bolo");
+
         $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
           cardapio.metodos.adicionarAoCarrinho();
         });
@@ -131,8 +132,8 @@ cardapio.metodos = {
         let item = `
           <h2 class="info-product-name">${itemEncontrado.name}</h2>
           ${itemEncontrado.dsc ? `<p class="info-product-dsc">${itemEncontrado.dsc}</p>` : false}
-          <span>Alguma Observação:</span>
-          <textarea name="observacao" id="observacao" maxlength="200"></textarea>
+          <span class="info-price">${"R$ " + itemEncontrado.price.toFixed(2)}</span></br>
+          <span class="info-obs">Obs: Escolha a quantidade que deseja abaixo!</span>
         `
         $(".info-product-qntd").removeClass("hidden");
         $(".btn-adiconar-info").removeClass("centralizar-bolo");
@@ -233,27 +234,18 @@ cardapio.metodos = {
   },
 
   pegarTemplateCento: (item) => {
-    let itensCento = item.dsc.split(',');
+    $(".content-scrollable").html("")
     let html = `
       <h2 class="info-product-name">${item.name}</h2>
-        <div class="itens-cento-container">
-            <h4>Itens inclusos:</h4>
-            <ul class="list-itens-cento">
-    `;
-    
-    
-    $.each(itensCento, (i, item) => {
-        html += `<li>${item.trim()}</li>`;
-    });
-    
-    html += `
-            </ul>
-        </div>
-        <span>Alguma Observação:</span>
-        <textarea name="observacao" id="observacao" maxlength="200"></textarea>
-    `;
-
-    //$(".info-product-price").text("R$ " + item.price.toFixed(2));
+      <div class="itens-cento-container">
+        <p class="info-product-dsc">${item.dsc}</p>
+        <span class="info-price">${"R$ " + item.price.toFixed(2)}</span>
+        </br>
+        <span class="info-obs">Obs: Escolha a quantidade que deseja abaixo!</br>
+              Obs: 1 quantidade igual a 100 unidades!
+        </span>
+      </div>
+    `
     $(".content-scrollable").html(html);
   },
 
@@ -297,6 +289,7 @@ cardapio.metodos = {
     id = ITEM_ATUAL_ID;
     console.log("Adicionando ao carrinho o item com ID:", id);
     let qntdAtual = parseInt($("#qntd-" + id).text());
+
     console.log("Quantidade atual:", qntdAtual);
     if(qntdAtual > 0){
       var categoria = $(".container-menu a.active").attr("id").split("menu-")[1];

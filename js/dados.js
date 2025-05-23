@@ -108,7 +108,7 @@ var MENU = {
             "id": "Cento1",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Quiches",
-            "dsc": "Quiches de carne seca,Quiches de frango cremoso,Quiches de ameixa c/ bacon,Quiches de ameixa c/ abacaxi,Quiches de ricota c/ frango,Quiche de Salpicão,Quiche de calabresa,Quiche de Romeu e Julieta",
+            "dsc": "Quiches de carne seca, Quiches de frango cremoso, Quiches de ameixa c/ bacon, Quiches de ameixa c/ abacaxi, Quiches de ricota c/ frango, Quiche de Salpicão, Quiche de calabresa, Quiche de Romeu e Julieta",
             "price": 140.00
         },
 
@@ -116,7 +116,7 @@ var MENU = {
             "id": "Cento2",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Cento 2",
-            "dsc":"Cestinha de frango,Barquete de salpicão,Barquete de ovo de codorna c/ molho rosé",
+            "dsc":"Cestinha de frango, Barquete de salpicão, Barquete de ovo de codorna c/ molho rosé",
             "price": 170.00
         },
 
@@ -124,25 +124,33 @@ var MENU = {
             "id": "Cento3",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Cento 3",
-            "dsc":"Barquinha de camarão,Bolinho de bacalhau,Empanado de camarão",
+            "dsc":"Barquinha de camarão, Bolinho de bacalhau, Empanado de camarão",
             "price": 220.00
         },
 
     ],
-    "CentoDoces": [    
+    "CentoDoces": [
         {
             "id": "Tradicionais",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Tradicionais",
-            "dsc": "Brigadeiro,Beijinho,Casadinho,Leite em pó",
+            "dsc": "Brigadeiro, Beijinho, Casadinho, Leite em pó",
             "price": 140.00
+        },
+        
+        {
+            "id": "Intermediarios",
+            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "name": "Intermediarios",
+            "dsc": "Leite em pó c/ creme de avelã, Churros, Surpresa de Uva, Amendoin, Castanha, Olho de Sogra, Brigadeiro de Oreo",
+            "price": 160
         },
 
         {
             "id": "Finos",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Finos",
-            "dsc": "Leite ninho c/ uva,Trufas recheadas,Brigadeiro de cereja,Banana caramelizada",
+            "dsc": "Leite ninho c/ uva, Trufas recheadas, Brigadeiro de cereja, Banana caramelizada",
             "price": 180.00
         },
 
@@ -150,16 +158,15 @@ var MENU = {
             "id": "Finos2",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Finos",
-            "dsc": "Damasco recheado,Camafeu de nozes,Copo de chocolate c/ cereja",
+            "dsc": "Damasco recheado, Camafeu de nozes, Copo de chocolate c/ cereja",
             "price": 210.00
         },
 
     ],
-
-    "PorUnidade":[
+    "Doces":[
         {
             "id": "Brigadeiro",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/BRIGADEIRO.png",
             "name": "Brigadeiro",
             "dsc": "1 Und",
             "price": 2.0
@@ -167,7 +174,7 @@ var MENU = {
 
         {
             "id": "Beijinho",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/BEIJINHO.png",
             "name": "Beijinho",
             "dsc": "1 Und",
             "price": 2.0
@@ -175,23 +182,23 @@ var MENU = {
 
         {
             "id": "Casadinho",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/CASADINHO.png",
             "name": "Casadinho",
             "dsc": "1 Und",
             "price": 2.0
         },  
 
         {
-            "id": "Leite em pó",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Leiteempó",
+            "img": "../img/cardapio/Porunidade/LEITEEMPO.png",
             "name": "Leite em pó",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Leite em pó c/ creme de avelã",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Leiteempóccremedeavelã",
+            "img": "../img/cardapio/Porunidade/LEITEEMPOCOMCREMEDEAVELA.png",
             "name": "Leite em pó c/ creme de avelã",
             "dsc": "1 Und",
             "price": 2.0
@@ -199,15 +206,15 @@ var MENU = {
 
         {
             "id": "Churros",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/CHURROS.png",
             "name": "Churros",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Surpresa de uva",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Surpresadeuva",
+            "img": "../img/cardapio/Porunidade/SURPRESADEUVA.png",
             "name": "Surpresa de uva",
             "dsc": "1 Und",
             "price": 2.0
@@ -215,67 +222,67 @@ var MENU = {
 
         {
             "id": "Amendoim",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/Amendoin.png",
             "name": "Amendoim",
             "dsc": "1 Und",
             "price": 2.0
         },
         {
             "id": "Castanha",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "../img/cardapio/Porunidade/CASTANHA.png",
             "name": "Castanha",
             "dsc": "1 Und",
             "price": 2.0
         },
         {
-            "id": "Olho de sogra",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Olhodesogra",
+            "img": "/img/cardapio/Porunidade/OLHODESOGRA.png",
             "name": "Olho de sogra",
             "dsc": "1 Und",
             "price": 2.0
         },
         {
-            "id": "Brigadeiro de Oreo",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "BrigadeirodeOreo",
+            "img": "/img/cardapio/Porunidade/BRIGADEIRODEOREO.png",
             "name": "Brigadeiro de Oreo",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Leite ninho c/ uva",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Leiteninhocomuva",
+            "img": "/img/cardapio/Porunidade/LEITENINHOCOMUVA.png",
             "name": "Leite ninho c/ uva",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Trufas recheadas",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Trufasrecheadas",
+            "img": "/img/cardapio/Porunidade/TRUFASRECHEADAS.png",
             "name": "Trufas recheadas",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Brigadeiro de cereja",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Brigadeirodecereja",
+            "img": "/img/cardapio/Porunidade/BRIGADEIRODECEREJA.png",
             "name": "Brigadeiro de cereja",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Banana caramelizada",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Bananacaramelizada",
+            "img": "/img/cardapio/Porunidade/BANANACARAMELIZADA.png",
             "name": "Banana caramelizada",
             "dsc": "1 Und",
             "price": 2.0
         },
         {
-            "id": "Damasco recheado",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Damascorecheado",
+            "img": "/img/cardapio/Porunidade/DASMASCORECHEADO.png",
             "name": "Damasco recheado",
             "dsc": "1 Und",
             "price": 2.0
@@ -283,21 +290,20 @@ var MENU = {
 
         {
             "id": "Camafeu de nozes",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "img": "/img/cardapio/Porunidade/CAMAFEUDENOZES.png",
             "name": "Camafeu de nozes",
             "dsc": "1 Und",
             "price": 2.0
         },
 
         {
-            "id": "Copo de chocolate c/ cereja",
-            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "id": "Copodechocolatecomcereja",
+            "img": "/img/cardapio/Porunidade/COPODECHOCOLATECOMCEREJA.png",
             "name": "Copo de chocolate c/ cereja",
             "dsc": "1 Und",
             "price": 2.0
         },
     ],
-
     "Bolos":[
         {
             "id": "bolo",
@@ -307,7 +313,6 @@ var MENU = {
             "price": 0
         },
     ],
-
     "BoloRecheiosTradicionais": [
         {
             "id": "Coco",
@@ -339,7 +344,6 @@ var MENU = {
             "price": 50.00
         }
     ],
-
     "BoloRecheios": [
         {
             "id": "DoisAmores",
@@ -383,7 +387,6 @@ var MENU = {
             "price": 55.00
         }
     ],
-
     "Decoracao": [
         {
             "id": "Morangos",
@@ -403,8 +406,7 @@ var MENU = {
             "price": 2.00
         }
     ],
-
-    "Doces": [
+    "DocesModelados": [
         {
             "id": "Trufadoredondo3D",
             "img": "./img/cardapio/Doces/TrufadoRando3d.png",
@@ -535,148 +537,6 @@ var MENU = {
             "price": 7
         },
         
-    ],
-    "Docestradicionais": [
-        {
-            "id": "Brigadeiro",
-            "img": "./img/cardapio/steaks/california-reserve-filet-mignon-steaks-gift-box.bf226e317aad85f47897ae7e325f790d.jpg",
-            "name": "Brigadeiro",
-            "dsc": "100 und",
-            "price": 140.00
-        },
-        {
-            "id": "Beijinho",
-            "img": "./img/cardapio/steaks/valentines-steaks-and-cakes-dinner-for-2.0c63dab635eed46209455dc33cd25ea8.jpg",
-            "name": "Beijinho",
-            "dsc": "100 und",
-            "price": 140.00
-        },
-        {
-            "id": "Casadinho",
-            "img": "./img/cardapio/steaks/valentines-steaks-and-cakes-dinner-for-2.0c63dab635eed46209455dc33cd25ea8.jpg",
-            "name": "Casadinho",
-            "dsc": "100 und",
-            "price": 140.00
-        },
-        {
-            "id": "Leiteempó",
-            "img": "./img/cardapio/steaks/valentines-steaks-and-cakes-dinner-for-2.0c63dab635eed46209455dc33cd25ea8.jpg",
-            "name": "Leite em pó",
-            "dsc": "100 und",
-            "price": 140.00
-        },
-       
-    ],
-    "Docesintermediários": [
-        {
-            "id": "Leiteempóc/cremedeavelã",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Leite em pó c/creme de avelã",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Churros",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Churros",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Surpresadeuva",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Leite em pó c/creme de avelã",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Amendoim",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Amendoim",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Castanha",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Castanha",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Olhodesogra",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Olho de sogra",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        {
-            "id": "Brigadeirodeoreo",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Brigadeiro de oreo",
-            "dsc": "100 und",
-            "price": 160.00
-        },
-        
-    ],
-    "Docesfinos": [
-        {
-            "id": "Leite ninho c/uva",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Leite ninho c/uva",
-            "dsc": "100 und",
-            "price": 180.00
-        },
-
-        {
-            "id": "Trufas recheadas",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Trufas recheadas",
-            "dsc": "100 und",
-            "price": 180.00
-        },
-
-        {
-            "id": "Brigadeiro de cereja",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Brigadeiro de cereja",
-            "dsc": "100 und",
-            "price": 180.00
-        },
-
-
-        {
-            "id": "Banana caramelizada",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Banana caramelizada",
-            "dsc": "100 und",
-            "price": 180.00
-        },
-
-        {
-            "id": "Dasmaco recheado",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Dasmaco recheado",
-            "dsc": "100 und",
-            "price": 210.00
-        },
-
-        {
-            "id": "Camafeu de nozes",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Camafeu de nozes",
-            "dsc": "100 und",
-            "price": 210.00
-        },
-
-        {
-            "id": "Copo de chocolate c/cereja",
-            "img": "./img/cardapio/pizzas/2-lou-malnatis-deep-dish-pizzas.bf0fe065d251a9cca3925b269d443a27.jpg",
-            "name": "Copo de chocolate c/cereja",
-            "dsc": "100 und",
-            "price": 210.00
-        },
-
     ],
     "Natal": [
         {
