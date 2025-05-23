@@ -651,6 +651,10 @@ footer{
   border-radius: 5px;
 }
 
+.detalhes-product-responsive{
+  display: none;
+}
+
 .closeInfoProduct{
   color: #aaa;
   float: right;
@@ -1018,6 +1022,8 @@ select.form-control{
   #container-img{
     height: 50%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .infoProduct-body{
@@ -1035,5 +1041,13 @@ select.form-control{
 
   .info-product-name{
     font-size: 20px;
+  }
+
+  .detalhes-product-responsive{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
   }
 }

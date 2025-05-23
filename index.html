@@ -61,7 +61,7 @@
     <div class="hero-content container">
       <h1>Transforme seus momentos <br> em doces memórias</h1>
       <p>Bolos artesanais e kits festa personalizados para todas as ocasiões especiais</p>
-      <a href="#pedido" class="btn-pedido">Faça seu Pedido</a>
+      <a href="#cardapio" class="btn-pedido">Faça seu Pedido</a>
     </div>
   </section>
 
@@ -460,13 +460,17 @@
     <div class="product-card">
 
       <div id="container-img">
+        <div class="detalhes-product-responsive">
+          <span>Detalhes do produto</span>
+          <span class="closeInfoProduct" onclick="cardapio.metodos.closeInfoProduct()">&times;</span>
+        </div>
         <div id="info-product-img"></div>
       </div>
 
       <div class="infoProduct-body">
 
         <div class="detalhes-product">
-          <span>Detalhes do produto</span>
+          <span class="me-3">Detalhes do produto</span>
           <span class="closeInfoProduct" onclick="cardapio.metodos.closeInfoProduct()">&times;</span>
         </div>
 
@@ -480,7 +484,6 @@
           </div>
           <button class="btn btn-adiconar-info" type="button">
              <span>Adicionar</span>
-             <span class="info-product-price">0,00</span>
           </button>
         </div>
     </div>
