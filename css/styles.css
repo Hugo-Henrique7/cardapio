@@ -634,7 +634,6 @@ footer{
   bottom: 0;
   display: flex;
   justify-content: center;
-  gap: 10px;
 }
 
 #container-img{
@@ -670,7 +669,9 @@ footer{
 
 .titleAdicionalBolo{
   background-color: rgb(243, 244, 246);
-  height: 60px;
+  height: 50px;
+  display: flex;
+  padding-left: 15px;
 }
 
 .select-desativado {
@@ -685,8 +686,8 @@ footer{
 
 .btn-adiconar-info{
   display: flex;
-  width: 180px;
-  justify-content: space-between;
+  width: 150px;
+  justify-content: center;
   font-weight: 600;
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -1016,7 +1017,7 @@ select.form-control{
     display: flex;
     flex-direction: column;
     width: 350px;
-    height: 400px;
+    height: 500px;
   }
 
   #container-img{

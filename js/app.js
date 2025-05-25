@@ -16,6 +16,7 @@ cardapio.eventos = {
     cardapio.metodos.obterItensCardapio();
     cardapio.metodos.carregarBotaoLigar()
     cardapio.metodos.carregarBotaoReserva();
+    cardapio.metodos.controlItensBolo();
   }
 };
 
@@ -150,7 +151,10 @@ cardapio.metodos = {
       let recheios = MENU["BoloRecheios"]
       let decoracao = MENU["Decoracao"]
       $(".content-scrollable").html("");
-      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Recheios Tradicionais</strong></div>`);
+      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>
+        <small>Escolha até 2 Recheios</small><br>
+        Recheios Tradicionais
+        </strong></div>`);
       $.each(recheiosTradiconais, (i, e) => {
       let temp = cardapio.templates.recheiosTradiconais.replace(/\${nometradicional}/g, e.name)
                                                         .replace(/\${precotradicional}/g, e.price.toFixed(2).replace('.', ','))
@@ -173,9 +177,11 @@ cardapio.metodos = {
       let temp =  cardapio.templates.decoracao.replace(/\${nomedecoracao}/g, e.name)
                                               .replace(/\${precodecoracao}/g, e.price.toFixed(2).replace('.', ','))
                                               .replace(/\${id}/g, e.id);
-
       $(".content-scrollable").append(temp);
+
       })
+
+      $(".content-scrollable").append(cardapio.templates.qntdbrigadeiro);
   },
 
   itensBolosSelecionados: () => {
@@ -209,11 +215,21 @@ cardapio.metodos = {
     $(".decoracao input[type='checkbox']:checked").each(function() {
         let id = $(this).attr("id");
         let adicional = MENU["Decoracao"].find(a => a.id === id);
-        if (adicional) {
-            boloItens.push({
-                name: adicional.name,
-                price: adicional.price
-            });
+        if(adicional){
+          if (id === "Brigadeiros" && $(".decoracao-select#Brigadeiros").is(":checked")) {
+            let qntd = parseInt($("#qntd-brigadeiros").text());
+              if (qntd > 0) {
+                  boloItens.push({
+                      name: `Brigadeiros (${qntd} un)`,
+                      price: adicional.price * qntd
+                  });
+              }
+          }
+        }else{
+          boloItens.push({
+              name: adicional.name,
+              price: adicional.price
+          });
         }
     });
     return boloItens
@@ -221,16 +237,41 @@ cardapio.metodos = {
 
   controlItensBolo: () => {
     const LIMITE_SELECTS = 2;
-    
+
     $(document).off("change", ".recheio-select").on("change", ".recheio-select", function () {
       let totalSelecionados = $(".recheio-select:checked").length;
-
       if (totalSelecionados >= LIMITE_SELECTS) {
         $(".recheio-select:not(:checked)").prop("disabled", true).addClass("checkbox-desativado");
       } else {
         $(".recheio-select").prop("disabled", false).removeClass("checkbox-desativado");
       }
     });
+
+    $(document).off("change", ".decoracao-select").on("change", ".decoracao-select", function () {
+      if ($(this).attr("id") === "Brigadeiros"){
+        let marcado = $(this).prop("checked");
+
+        if (marcado) {
+          $(".qntd-brigadeiro").prop("disabled", false).removeClass("hidden");
+          $("#qntd-brigadeiros").text("1");
+        } else {
+          $(".qntd-brigadeiro").prop("disabled", true).addClass("hidden");
+          $("#qntd-brigadeiros").text("0");
+        }
+      }
+    });
+  },
+
+  diminuirQuantidadeBrigadeiros: () => {
+    let qntdAtual = parseInt($("#qntd-brigadeiros").text());
+    if (qntdAtual > 0) {
+      $("#qntd-brigadeiros").text(qntdAtual - 1);
+    }
+  },
+
+  aumentarQuantidadeBrigadeiros: () => {
+    let qntdAtual = parseInt($("#qntd-brigadeiros").text());
+    $("#qntd-brigadeiros").text(qntdAtual + 1);
   },
 
   pegarTemplateCento: (item) => {
@@ -651,35 +692,45 @@ cardapio.metodos = {
 
   //Atualiza o link do botão do whatsApp
   finalizarPedido: () => {
-    if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
-        // Inicializa o texto do pedido
-        let texto = "Olá, gostaria de fazer um pedido:";
-        texto += `\n*Itens do pedido:*\n\n`;
+  if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
+    let texto = "Olá, gostaria de fazer um pedido:";
+    texto += `\n*Itens do pedido:*\n\n`;
 
-        // Monta a lista de itens
-        let itens = '';
-        $.each(MEU_CARRINHO, (i, e) => {
-            itens += `*${e.qntd}x* ${e.name} ....... R$ ${e.price.toFixed(2).replace('.', ',')} \n`;
+    let itens = '';
+    $.each(MEU_CARRINHO, (i, e) => {
+      itens += `*${e.qntd}x* ${e.name} ....... R$ ${e.price.toFixed(2).replace('.', ',')}\n`;
+
+      // Se for bolo com adicionais
+      if (e.adicionais && Array.isArray(e.adicionais) && e.adicionais.length > 0) {
+        itens += `_Adicionais:_\n`;
+        e.adicionais.forEach(ad => {
+          // Aqui corrigido: usamos ad.price
+          itens += `- ${ad.name} (R$ ${ad.price.toFixed(2).replace('.', ',')})\n`;
         });
+      }
 
-        texto += itens; // Adiciona os itens ao texto
+      // Se houver observações
+      if (e.observacao && e.observacao.trim() !== '') {
+        itens += `_Obs:_ ${e.observacao}\n`;
+      }
 
-        // Adiciona o endereço e o total ao texto
-        texto += `\n*Endereço de entrega:*`;
-        texto += `\n${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`;
-        texto += `\n${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`;
-        texto += `\n\n*Total (com entrega):* R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace('.', ',')}`;
+      itens += '\n'; // quebra entre itens
+    });
 
-        // Converte o texto em uma URL para o WhatsApp
-        let encode = encodeURIComponent(texto);
-        let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
+    texto += itens;
 
-        // Atualiza o atributo href do botão
-        $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
-    }
-  },
+    texto += `\n*Endereço de entrega:*`;
+    texto += `\n${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`;
+    texto += `\n${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`;
+    texto += `\n\n*Total (com entrega):* R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace('.', ',')}`;
 
-  
+    let encode = encodeURIComponent(texto);
+    let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
+
+    $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
+  }
+},
+
   abrirDepoimento: (depoimento) => {
 
     $("#depoimento-1").addClass("hidden");
@@ -775,7 +826,7 @@ cardapio.templates = {
           </label>
           <input class="bg-tertiary check-input recheio-select" type="checkbox" name="\${id}" id="\${id}">
         </div>
-      </div>
+    </div>
   `,
 
   decoracao: `
@@ -785,7 +836,18 @@ cardapio.templates = {
           <span><strong>\${nomedecoracao}</strong></span>
           <small class="price-adicional">&#43;\${precodecoracao}</small>
         </label>
-        <input class="bg-tertiary check-input" type="checkbox" name="\${iddecoracao}" id="\${id}">
+        <input class="bg-tertiary check-input decoracao-select" type="checkbox" name="\${iddecoracao}" id="\${id}">
+      </div>
+    </div>
+  `,
+
+  qntdbrigadeiro: `
+    <div class="hidden qntd-brigadeiro mt-2 d-flex justify-content-around">
+      <span>Informe a Quantidade:</span>
+      <div>
+        <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeBrigadeiros()"><i class="fas fa-minus"></i></span>
+        <span class="add-numero-itens" id="qntd-brigadeiros"" >0</span>
+        <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidadeBrigadeiros()"><i class="fas fa-plus"></i></span>
       </div>
     </div>
   `,
