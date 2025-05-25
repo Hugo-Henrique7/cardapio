@@ -151,10 +151,10 @@ cardapio.metodos = {
       let recheios = MENU["BoloRecheios"]
       let decoracao = MENU["Decoracao"]
       $(".content-scrollable").html("");
-      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>
-        <small>Escolha até 2 Recheios</small><br>
-        Recheios Tradicionais
-        </strong></div>`);
+      $(".content-scrollable").append(`<div class="mb-2">
+        <small class="info-obs">Escolha até 2 Recheios</small><br>
+        <strong class="titleAdicionalBolo">Recheios Tradicionais:</strong>
+        </div>`);
       $.each(recheiosTradiconais, (i, e) => {
       let temp = cardapio.templates.recheiosTradiconais.replace(/\${nometradicional}/g, e.name)
                                                         .replace(/\${precotradicional}/g, e.price.toFixed(2).replace('.', ','))
@@ -163,7 +163,7 @@ cardapio.metodos = {
       $(".content-scrollable").append(temp);
       })
 
-      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Recheios</strong></div>`);
+      $(".content-scrollable").append(`<div class="mb-2 mt-2"><strong class="titleAdicionalBolo">Recheios:</strong></div>`);
       $.each(recheios, (i, e) => {
       let temp = cardapio.templates.recheios.replace(/\${nomerecheio}/g, e.name)
                                             .replace(/\${precorecheio}/g, e.price.toFixed(2).replace('.', ','))
@@ -172,7 +172,7 @@ cardapio.metodos = {
       $(".content-scrollable").append(temp);
       })
 
-      $(".content-scrollable").append(`<div class="titleAdicionalBolo"><strong>Decorações</strong></div>`);
+      $(".content-scrollable").append(`<div class="mb-2 mt-2"><strong class="titleAdicionalBolo">Decorações:</strong></div>`);
       $.each(decoracao, (i, e) => {
       let temp =  cardapio.templates.decoracao.replace(/\${nomedecoracao}/g, e.name)
                                               .replace(/\${precodecoracao}/g, e.price.toFixed(2).replace('.', ','))
@@ -306,8 +306,11 @@ cardapio.metodos = {
     let categoria = $(".container-menu a.active").attr("id").split("menu-")[1];
     let filtro = MENU[categoria]
 
+    if(adicionaisBolo.length === 0){
+      return alert("Você não escolheu nenhum item para o bolo")
+    }
+
     let item = filtro.find(e => e.id == id);
-    console.log(`Pasou aqui ${item}`)
 
     let newBolo ={
       id: item.id,
@@ -692,43 +695,68 @@ cardapio.metodos = {
 
   //Atualiza o link do botão do whatsApp
   finalizarPedido: () => {
-  if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
-    let texto = "Olá, gostaria de fazer um pedido:";
-    texto += `\n*Itens do pedido:*\n\n`;
-
-    let itens = '';
-    $.each(MEU_CARRINHO, (i, e) => {
-      itens += `*${e.qntd}x* ${e.name} ....... R$ ${e.price.toFixed(2).replace('.', ',')}\n`;
-
-      // Se for bolo com adicionais
-      if (e.adicionais && Array.isArray(e.adicionais) && e.adicionais.length > 0) {
-        itens += `_Adicionais:_\n`;
-        e.adicionais.forEach(ad => {
-          // Aqui corrigido: usamos ad.price
-          itens += `- ${ad.name} (R$ ${ad.price.toFixed(2).replace('.', ',')})\n`;
+    if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
+        // Cabeçalho da mensagem
+        let texto = "🛒 *PEDIDO - CONFEITARIA DOCE SABOR* 🛒\n\n";
+        texto += "📋 *DETALHES DO PEDIDO*\n\n";
+        texto += "⏱️ *Data/Hora:* " + new Date().toLocaleString() + "\n\n";
+        
+        // Lista de itens com adicionais
+        texto += "🍱 *ITENS:*\n";
+        texto += "════════════════════════\n";
+        
+        $.each(MEU_CARRINHO, (i, e) => {
+            // Item principal
+            texto += `\n🍽️ *${e.qntd}x ${e.name}* - R$ ${(e.price * e.qntd).toFixed(2).replace('.', ',')}\n`;
+            
+            // Adicionais do item (se houver)
+            if (e.adicionais && e.adicionais.length > 0) {
+                texto += `   ┌───────────────────\n`;
+                e.adicionais.forEach(adicional => {
+                    texto += `   │ ✨ ${adicional.name} (+ R$ ${adicional.price.toFixed(2).replace('.', ',')})\n`;
+                });
+                texto += `   └───────────────────\n`;
+            }
         });
-      }
 
-      // Se houver observações
-      if (e.observacao && e.observacao.trim() !== '') {
-        itens += `_Obs:_ ${e.observacao}\n`;
-      }
+        // Totais
+        texto += "\n💰 *VALORES*\n";
+        texto += "════════════════════════\n";
+        texto += `   Subtotal: R$ ${VALOR_CARRINHO.toFixed(2).replace('.', ',')}\n`;
+        texto += `   Taxa de Entrega: R$ ${VALOR_ENTREGA.toFixed(2).replace('.', ',')}\n`;
+        texto += `   *TOTAL: R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace('.', ',')}*\n\n`;
 
-      itens += '\n'; // quebra entre itens
-    });
+        // Endereço
+        texto += "🏡 *ENTREGA*\n";
+        texto += "════════════════════════\n";
+        texto += `   📍 ${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}\n`;
+        texto += `   🏘️ ${MEU_ENDERECO.bairro}\n`;
+        texto += `   🏙️ ${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf}\n`;
+        texto += `   📮 CEP: ${MEU_ENDERECO.cep}\n`;
+        if (MEU_ENDERECO.complemento) {
+            texto += `   🏷️ Complemento: ${MEU_ENDERECO.complemento}\n`;
+        }
+        
+        texto += "\n📝 *OBSERVAÇÕES:*\n";
+        texto += "   (Por favor, informe qualquer observação adicional)\n\n";
+        texto += "🔄 *Caso precise alterar algo, por favor avise!*\n";
 
-    texto += itens;
+        // Converte para URL do WhatsApp
+        let encode = encodeURIComponent(texto);
+        let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
 
-    texto += `\n*Endereço de entrega:*`;
-    texto += `\n${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`;
-    texto += `\n${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`;
-    texto += `\n\n*Total (com entrega):* R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace('.', ',')}`;
-
-    let encode = encodeURIComponent(texto);
-    let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
-
-    $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
-  }
+        // Atualiza o botão
+        $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
+        
+        // Debug: Verifique no console se a URL está correta
+        console.log("URL do WhatsApp:", URL);
+    } else {
+        if (MEU_CARRINHO.length === 0) {
+            cardapio.metodos.mensagem("Seu carrinho está vazio!", "red");
+        } else {
+            cardapio.metodos.mensagem("Endereço não informado!", "red");
+        }
+    }
 },
 
   abrirDepoimento: (depoimento) => {
@@ -843,7 +871,7 @@ cardapio.templates = {
 
   qntdbrigadeiro: `
     <div class="hidden qntd-brigadeiro mt-2 d-flex justify-content-around">
-      <span>Informe a Quantidade:</span>
+      <strong class="titleAdicionalBolo">Informe a Quantidade:</strong>
       <div>
         <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeBrigadeiros()"><i class="fas fa-minus"></i></span>
         <span class="add-numero-itens" id="qntd-brigadeiros"" >0</span>
@@ -892,10 +920,3 @@ cardapio.templates = {
       </div>
    `
 };
-
-/*
-<span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
-        <span class="add-numero-itens" id="qntd-\${id}">0</span>
-        <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
-        fa fa-shopping-bag
-*/

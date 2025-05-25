@@ -668,10 +668,7 @@ footer{
 }
 
 .titleAdicionalBolo{
-  background-color: rgb(243, 244, 246);
-  height: 50px;
-  display: flex;
-  padding-left: 15px;
+  color: var(--color-primary);
 }
 
 .select-desativado {

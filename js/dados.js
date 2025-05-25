@@ -308,7 +308,7 @@ var MENU = {
         {
             "id": "bolo",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
-            "name": "Monte seu Bolo",
+            "name": "Bolo",
             "dsc": "Monte Seu Bolo",
             "price": 0
         },
