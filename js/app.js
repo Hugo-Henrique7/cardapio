@@ -290,10 +290,6 @@ cardapio.metodos = {
     $(".content-scrollable").html(html);
   },
 
-  updateTotal: () => {
-
-  },
-
   closeInfoProduct: () => {
     $(".infoProduct").addClass("hidden")
     ITEM_ATUAL_ID = []
@@ -716,6 +712,8 @@ cardapio.metodos = {
                     texto += `   │ ✨ ${adicional.name} (+ R$ ${adicional.price.toFixed(2).replace('.', ',')})\n`;
                 });
                 texto += `   └───────────────────\n`;
+            }else {
+                texto += `   └ *Sem adicionais*\n`;
             }
         });
 
@@ -750,14 +748,8 @@ cardapio.metodos = {
         
         // Debug: Verifique no console se a URL está correta
         console.log("URL do WhatsApp:", URL);
-    } else {
-        if (MEU_CARRINHO.length === 0) {
-            cardapio.metodos.mensagem("Seu carrinho está vazio!", "red");
-        } else {
-            cardapio.metodos.mensagem("Endereço não informado!", "red");
-        }
     }
-},
+  },
 
   abrirDepoimento: (depoimento) => {
 

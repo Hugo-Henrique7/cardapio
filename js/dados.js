@@ -11,7 +11,7 @@ var MENU = {
             "id": "Minihamburguer",
             "img": "/img/cardapio/Salgados/MINIHAMBURGUERDECARNE1.png",
             "name": "Mini hamburguer",
-            "dsc": " 1 UND",
+            "dsc": "1 UND",
             "price": 4.00
         },
         {
@@ -26,14 +26,21 @@ var MENU = {
             "img": "/img/cardapio/Salgados/CREMEDECAMARAO1.png",
             "name": "Creme de camarão",
             "dsc": "1 litro",
-            "price": 75.00
+            "price": 100.00
         },
         {
             "id": "Cremedegalinha",
             "img": "/img/cardapio/Salgados/CREMEDEGALINHA1.png",
             "name": "Creme de galinha",
-            "dsc": " 1 litro",
+            "dsc": "1 litro",
             "price": 50.00
+        },
+        {
+            "id": "Vatapadecamarao",
+            "img": "/img/cardapio/Salgados/VATAPADECAMARAO.png",
+            "name": "Vatapá de camarão",
+            "dsc": "1 litro",
+            "price": 75.00
         },
         {
             "id": "Sanduicheamericano",
@@ -46,7 +53,7 @@ var MENU = {
             "id":"Minicachorroquente", 
             "img": "/img/cardapio/Salgados/MINICACHORROQUENTE1.png",
             "name": "Mini cachorro quente",
-            "dsc": " 1 UND",
+            "dsc": "1 UND",
             "price": 3.50
         },
         {
@@ -97,7 +104,7 @@ var MENU = {
         {
             "id": "CroissantCataventoPastelfolheadoCroquetedeBacalhauTortinhadelimao",
             "img": "../img/cardapio/Salgados/cento65.png",
-            "name": "Cento Salgados",
+            "name": "Cento Salgados Folhados",
             "dsc": "Croissant, Cata vento,Pastel folheado,Croquete de Bacalhau,Tortinha de limão.",
             "price": 65.00
         
@@ -163,7 +170,7 @@ var MENU = {
         },
 
     ],
-    "Doces":[
+    "Docesund":[
         {
             "id": "Brigadeiro",
             "img": "../img/cardapio/Porunidade/BRIGADEIRO.png",
@@ -514,30 +521,6 @@ var MENU = {
         },
     
     ],
-    "Docesmodelados": [
-        {
-            "id": "Docemodelado",
-            "img": "./img/cardapio/bebidas/hong-kong-boba-tea-kit-for-6.63841de36d8e5edfafa13023fc303285.jpg",
-            "name": "Doce modelado",
-            "dsc": "",
-            "price": 600.00
-        },
-        {
-            "id": "Refrigerante1L",
-            "img": "./img/cardapio/bebidas/guys-caliente-margaritas-for-12.ca8c6bc06b8f1039549385ffcebc749d.jpg",
-            "name": "CALABRESA",
-            "dsc": "50 und",
-            "price": 325
-        },
-        {
-            "id": "Refrigerante1,5L",
-            "img": "./img/cardapio/bebidas/woodford-reserve-mint-julep-syrup.ef523ac7cbae5f4aba6b058207f490d2.jpg",
-            "name": "VEGETARIANO",
-            "dsc": "A und",
-            "price": 7
-        },
-        
-    ],
     "Natal": [
         {
             "id": "Fileaomolhodacasa",
@@ -568,7 +551,7 @@ var MENU = {
             "img": "/img/cardapio/Natal/CREMEDECAMARAO1.png",
             "name": "CREME DE CAMARÃO",
             "dsc": "CREME DE CAMARÃO",
-            "price": 70.00
+            "price": 100.00
         },
 
         {
