@@ -1010,6 +1010,9 @@ select.form-control{
 }
 
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
   .product-card{
     display: flex;
     flex-direction: column;
@@ -1047,5 +1050,12 @@ select.form-control{
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
+  }
+  .servicos {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
   }
 }

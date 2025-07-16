@@ -66,9 +66,19 @@ cardapio.metodos = {
 
   // Diminuir a quantidade do item no cardápio
   diminuirQuantidade: (id) => {
+    // Busca o item no MENU
+    let item = null;
+    $.each(MENU, (categoria, itens) => {
+      itens.forEach(e => { if(e.id == id) item = e; });
+    });
+
+    let min = item && item.min ? item.min : 0;
     let qntdAtual = parseInt($("#qntd-" + id).text());
-    if (qntdAtual > 0) {
+
+    if (qntdAtual > min) {
       $("#qntd-" + id).text(qntdAtual - 1);
+    } else if (min > 0) {
+      cardapio.metodos.mensagem(`Já está no valor mínimo (${min}) para este item.`, "red");
     }
   },
 
@@ -91,7 +101,7 @@ cardapio.metodos = {
         if(e.id === id){
           itemEncontrado = e;
           if(categoria === "Bolos") isBolo = true;
-          if(categoria === "CentoSalgados" || categoria === "CentoDoces") isCento = true;
+          if(categoria === "KitSalgados" || categoria === "KitDoces") isCento = true;
           return false
         }
       })
@@ -122,24 +132,49 @@ cardapio.metodos = {
         cardapio.metodos.pegarTemplateCento(itemEncontrado)
         $(".info-product-qntd").removeClass("hidden");
         $(".btn-adiconar-info").removeClass("centralizar-bolo");
-
         $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
           cardapio.metodos.adicionarAoCarrinho();
         });
       }
       else {
+        let nome = (itemEncontrado.name || "").toLowerCase();
+        let dsc = (itemEncontrado.dsc || "").toLowerCase();
+
+        // Detecta unidade pelo texto da descrição
+        let isLitro = dsc.includes("litro") || /\b\d+\s*l\b/.test(dsc);
+        let isKg = dsc.includes("kg") || dsc.includes("quilo");
+        let isCreme = nome.includes("creme") || nome.includes("caldo") || isLitro;
+        
+        let unidade = isLitro ? "L" : isKg ? "Kg" : "unidades";
+        let avisoMinimo = itemEncontrado.min
+          ? `<span class="info-obs">Obs: Mínimo ${itemEncontrado.min} ${unidade}</span>`
+          : "";
+
+        let obsMsg = isLitro
+          ? "<span class='info-obs'>Obs: Escolha a quantidade de litros abaixo!</span>"
+          : isKg
+            ? "<span class='info-obs'>Obs: Escolha a quantidade de Kg abaixo!</span>"
+            : "<span class='info-obs'>Obs: Escolha a quantidade que deseja abaixo!</span>";
+
         let item = `
           <h2 class="info-product-name">${itemEncontrado.name}</h2>
-          ${itemEncontrado.dsc ? `<p class="info-product-dsc">${itemEncontrado.dsc}</p>` : false}
-          <span class="info-price">${"R$ " + itemEncontrado.price.toFixed(2)}</span></br>
-          <span class="info-obs">Obs: Escolha a quantidade que deseja abaixo!</span>
+          ${itemEncontrado.dsc ? `<p class="info-product-dsc">${itemEncontrado.dsc}</p>` : ""}
+          <span class="info-price">${"R$ " + itemEncontrado.price.toFixed(2)}</span><br>
+          ${itemEncontrado.min ? avisoMinimo : obsMsg}
         `
         $(".info-product-qntd").removeClass("hidden");
         $(".btn-adiconar-info").removeClass("centralizar-bolo");
         $(".content-scrollable").html(item)
         $(document).off("click", ".btn-adiconar-info").on("click", ".btn-adiconar-info", function () {
-          cardapio.metodos.adicionarAoCarrinho();
+          if (isCreme || isLitro) {
+            cardapio.metodos.adicionarCremeAoCarrinho();
+          } else {
+            cardapio.metodos.adicionarAoCarrinho();
+          }
         });
+        if(itemEncontrado.min){
+          $("#qntd-" + itemEncontrado.id).text(itemEncontrado.min);
+        }
       }
     }
   },
@@ -274,6 +309,11 @@ cardapio.metodos = {
 
   pegarTemplateCento: (item) => {
     $(".content-scrollable").html("")
+    let obsQtd = "100 unidades";
+    // Verifica se é meio cento ou 50 salgados
+    if(item.name.toLowerCase().includes("meio cento")){
+      obsQtd = "50 unidades";
+    }
     let html = `
       <h2 class="info-product-name">${item.name}</h2>
       <div class="itens-cento-container">
@@ -281,7 +321,7 @@ cardapio.metodos = {
         <span class="info-price">${"R$ " + item.price.toFixed(2)}</span>
         </br>
         <span class="info-obs">Obs: Escolha a quantidade que deseja abaixo!</br>
-              Obs: 1 quantidade igual a 100 unidades!
+              Obs: 1 quantidade igual a ${obsQtd}!
         </span>
       </div>
     `
@@ -319,6 +359,29 @@ cardapio.metodos = {
     MEU_CARRINHO.push(newBolo)
     console.log("Bolo adicionado ao carrinho:", newBolo);
     cardapio.metodos.atualizarBadgeTotal();
+    cardapio.metodos.closeInfoProduct();
+  },
+
+  adicionarCremeAoCarrinho: () => {
+    let id = ITEM_ATUAL_ID;
+    let qntdAtual = parseInt($("#qntd-" + id).text());
+    let categoria = $(".container-menu a.active").attr("id").split("menu-")[1];
+    let filtro = MENU[categoria];
+    let item = filtro.find(e => e.id == id);
+
+    if (qntdAtual > 0 && item) {
+      // Cria um novo objeto para cada adição, com id único
+      let novoCreme = {
+        ...item,
+        qntd: qntdAtual,
+        id: item.id + '-' + Date.now(), // id único para cada adição
+        tipo: "creme"
+      };
+      MEU_CARRINHO.push(novoCreme);
+      cardapio.metodos.mensagem("Item adicionado ao carrinho", "green");
+      $("#qntd-" + id).text(item.min || 0);
+      cardapio.metodos.atualizarBadgeTotal();
+    }
     cardapio.metodos.closeInfoProduct();
   },
 
@@ -394,7 +457,7 @@ cardapio.metodos = {
       $("#modalcarrinho").addClass("hidden");
     }
   },
-  
+
   //Altera os textos e exibe botões das etapas
   carregarEtapa: (etapa) => {
     if(etapa == 1){
@@ -485,7 +548,7 @@ cardapio.metodos = {
   } else {
     $("#itensCarrinho").html('<p class="carrinho-vazio"><i class="fa fa-shopping-bag"></i> Seu Carrinho está vazio</p>');
   }
-},
+  },
 
   //Diminuir Quantidade do Item no carrinho
   diminuirQuantidadeCarrinho: (id) => {
@@ -564,39 +627,54 @@ cardapio.metodos = {
   //Atualiza o link do botão do whatsApp
   finalizarPedido: () => {
   if (MEU_CARRINHO.length > 0) {
-      let texto = "🛒 *PEDIDO - CONFEITARIA DOCE SABOR* 🛒\n\n";
-      texto += "📋 *DETALHES DO PEDIDO*\n\n";
-      texto += "⏱️ *Data/Hora:* " + new Date().toLocaleString() + "\n\n";
-      texto += "🍱 *ITENS:*\n";
-      texto += "════════════════════════\n";
-      
-      $.each(MEU_CARRINHO, (i, e) => {
-          texto += `\n🍽️ *${e.qntd}x ${e.name}* - R$ ${(e.price * e.qntd).toFixed(2).replace('.', ',')}\n`;
-          if (e.adicionais && e.adicionais.length > 0) {
-              texto += `   ┌───────────────────\n`;
-              e.adicionais.forEach(adicional => {
-                  texto += `   │ ✨ ${adicional.name} (+ R$ ${adicional.price.toFixed(2).replace('.', ',')})\n`;
-              });
-              texto += `   └───────────────────\n`;
-          } else {
-              texto += `   └ *Sem adicionais*\n`;
-          }
-      });
+    let texto = "🛒 *PEDIDO - katedral eventos * 🛒\n\n";
+    texto += "📋 *DETALHES DO PEDIDO*\n\n";
+    texto += "⏱️ *Data/Hora:* " + new Date().toLocaleString() + "\n\n";
+    texto += "🍱 *ITENS:*\n";
+    texto += "════════════════════════\n";
+    
+    $.each(MEU_CARRINHO, (i, e) => {
+      // Detecta se é cento ou meio cento
+      let nome = (e.name || "").toLowerCase();
+      let qtdTexto = "";
+      if (
+        nome.includes("meio cento") ||
+        nome.includes("50 salgados") ||
+        (nome.includes("50") && !nome.includes("100"))
+      ) {
+        qtdTexto = " (50 unidades)";
+      } else if (
+        nome.includes("cento") ||
+        nome.includes("100")
+      ) {
+        qtdTexto = " (100 unidades)";
+      }
+      texto += `\n🍽️ *${e.qntd}x ${e.name}${qtdTexto}* - R$ ${(e.price * e.qntd).toFixed(2).replace('.', ',')}\n`;
+      if (e.adicionais && e.adicionais.length > 0) {
+        texto += `   ┌───────────────────\n`;
+        e.adicionais.forEach(adicional => {
+          texto += `   │ ✨ ${adicional.name} (+ R$ ${adicional.price.toFixed(2).replace('.', ',')})\n`;
+        });
+        texto += `   └───────────────────\n`;
+      } else {
+        texto += `   └ *Sem adicionais*\n`;
+      }
+    });
 
-      texto += "\n💰 *VALORES*\n";
-      texto += "════════════════════════\n";
-      texto += `   Subtotal: R$ ${VALOR_CARRINHO.toFixed(2).replace('.', ',')}\n`;
-      texto += `   *TOTAL: R$ ${VALOR_CARRINHO.toFixed(2).replace('.', ',')}*\n\n`;
+    texto += "\n💰 *VALORES*\n";
+    texto += "════════════════════════\n";
+    texto += `   Subtotal: R$ ${VALOR_CARRINHO.toFixed(2).replace('.', ',')}\n`;
+    texto += `   *TOTAL: R$ ${VALOR_CARRINHO.toFixed(2).replace('.', ',')}*\n\n`;
 
-      texto += "\n📝 *OBSERVAÇÕES:*\n";
-      texto += "   (Por favor, informe qualquer observação adicional)\n\n";
-      texto += "🔄 *Caso precise alterar algo, por favor avise!*\n";
+    texto += "\n📝 *OBSERVAÇÕES:*\n";
+    texto += "   (Por favor, informe qualquer observação adicional)\n\n";
+    texto += "🔄 *Caso precise alterar algo, por favor avise!*\n";
 
-      let encode = encodeURIComponent(texto);
-      let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
+    let encode = encodeURIComponent(texto);
+    let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
 
-      $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
-      console.log("URL do WhatsApp:", URL);
+    $("#btnEtapaResumo").attr("href", URL).removeClass("hidden");
+    console.log("URL do WhatsApp:", URL);
   }
 },
 
@@ -612,7 +690,6 @@ cardapio.metodos = {
 
     $("#depoimento-" + depoimento).removeClass("hidden");
     $("#btnDepoimento-" + depoimento).addClass("active");
-
   },
 
   //Carrega o link do botão reserva

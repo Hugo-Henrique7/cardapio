@@ -4,36 +4,41 @@ var MENU = {
             "id": "Minisanduichedefrango",
             "img": "/img/cardapio/Salgados/MINISANDUICHEDEFRANGO1.png",
             "name": "Mini sanduiche de frango",
-            "dsc": "1 UND",
-            "price": 3.00
+            "dsc": "20 UND",
+            "price": 3.00,
+            "min": 20
         },
         {
             "id": "Minihamburguer",
             "img": "/img/cardapio/Salgados/MINIHAMBURGUERDECARNE1.png",
             "name": "Mini hamburguer",
-            "dsc": "1 UND",
-            "price": 4.00
+            "dsc": "20 UND",
+            "price": 4.00,
+            "min": 20
         },
         {
             "id": "Caldodecarnecomovosdecodorna",
             "img": "/img/cardapio/Salgados/caldodecarnecomcodorna.png",
             "name": "Caldo de carne com ovos de codorna",
-            "dsc": "1 litro",
-            "price": 40.00
+            "dsc": "Mínimo 2 litro",
+            "price": 40.00,
+            "minLitro": 2
         },
         {
             "id": "Cremedecamarao",
             "img": "/img/cardapio/Salgados/CREMEDECAMARAO1.png",
             "name": "Creme de camarão",
-            "dsc": "1 litro",
-            "price": 100.00
+            "dsc": "Mínimo 2 litro",
+            "price": 100.00,
+            "minLitro": 2
         },
         {
             "id": "Cremedegalinha",
             "img": "/img/cardapio/Salgados/CREMEDEGALINHA1.png",
             "name": "Creme de galinha",
-            "dsc": "1 litro",
-            "price": 50.00
+            "dsc": "Mínimo 2 litro",
+            "price": 50.00,
+            "minLitro": 2
         },
         {
             "id": "Vatapadecamarao",
@@ -46,29 +51,33 @@ var MENU = {
             "id": "Sanduicheamericano",
             "img": "/img/cardapio/Salgados/SANDUICHEAMERICANO.png",
             "name": "Sanduiche americano",
-            "dsc": "1 Kg",
-            "price": 50.00
+            "dsc": "2 Kg",
+            "price": 50.00,
+            "min": 2
         },
         {
             "id":"Minicachorroquente", 
             "img": "/img/cardapio/Salgados/MINICACHORROQUENTE1.png",
             "name": "Mini cachorro quente",
             "dsc": "1 UND",
-            "price": 3.50
+            "price": 3.50,
+            "min": 25
         },
         {
-            "id": "Mini Pizza",
+            "id": "MiniPizza",
             "img": "/img/cardapio/Salgados/MINIPIZZA1.png",
             "name": "Mini Pizza",
             "dsc": "1 UND",
-            "price": 3.50
+            "price": 3.50,
+            "min": 20
         },
         {
             "id": "MiniCupCakedecarneseca",
             "img": "/img/cardapio/Salgados/CUPYCAKEDECARNESECA1.png",
             "name": "Mini Cup Cake de carne seca",
             "dsc": "1 UND",
-            "price": 4.00
+            "price": 4.00,
+            "min": 20
         },
         {
             "id": "PatêFrango",
@@ -85,7 +94,6 @@ var MENU = {
             "dsc": "1 kg",
             "price": 50.00
         },
-
         {
             "id": "Torradas",
             "img": "/img/cardapio/Salgados/TORRADAS1.png",
@@ -97,9 +105,8 @@ var MENU = {
             "id": "CoxinhaEsfirraCartuchoEmpadaKibeDeliciaPasteldefornoBolinadequeijoMariabonitaPasteldeventoRisolesEmpadaodefrangoEnroladinhodequeijo",
             "img": "../img/cardapio/Salgados/cento55.png",
             "name": "Cento Salgados",
-            "dsc":  "Coxinha,Esfirra,Cartucho,Empada,Kibe,Delicia,Pastel de forno, Bolina de queijo,Maria bonita,Pastel de vento,Risoles,Empadao de frango,Enroladinho de queijo",
+            "dsc":  "Coxinha, Esfirra, Cartucho, Empada, Kibe, Delicia, Pastel de forno, Bolina de queijo, Maria bonita, Pastel de vento, Risoles, Empadao de frango, Enroladinho de queijo",
             "price": 55.00
-        
         },
         {
             "id": "CroissantCataventoPastelfolheadoCroquetedeBacalhauTortinhadelimao",
@@ -110,17 +117,17 @@ var MENU = {
         
         },
     ],
-    "CentoSalgados": [
+    "KitSalgados": [
         {
-            "id": "Cento1",
+            "id": "Cento1100",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
-            "name": "Quiches",
+            "name": "Cento Quiches",
             "dsc": "Quiches de carne seca, Quiches de frango cremoso, Quiches de ameixa c/ bacon, Quiches de ameixa c/ abacaxi, Quiches de ricota c/ frango, Quiche de Salpicão, Quiche de calabresa, Quiche de Romeu e Julieta",
             "price": 140.00
         },
 
         {
-            "id": "Cento2",
+            "id": "Cento2100",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Cento 2",
             "dsc":"Cestinha de frango, Barquete de salpicão, Barquete de ovo de codorna c/ molho rosé",
@@ -128,15 +135,37 @@ var MENU = {
         },
 
         {
-            "id": "Cento3",
+            "id": "Cento3100",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
             "name": "Cento 3",
             "dsc":"Barquinha de camarão, Bolinho de bacalhau, Empanado de camarão",
             "price": 220.00
         },
+        {
+            "id": "MeioCento150",
+            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "name": "Meio Cento Quiches",
+            "dsc": "Quiches de carne seca, Quiches de frango cremoso, Quiches de ameixa c/ bacon, Quiches de ameixa c/ abacaxi, Quiches de ricota c/ frango, Quiche de Salpicão, Quiche de calabresa, Quiche de Romeu e Julieta",
+            "price": 27.50
+        },
 
+        {
+            "id": "MeioCento250",
+            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "name": "Meio Cento 2",
+            "dsc":"Cestinha de frango, Barquete de salpicão, Barquete de ovo de codorna c/ molho rosé",
+            "price": 27.50
+        },
+
+        {
+            "id": "MeioCento350",
+            "img": "/img/cardapio/Bolos/monteseubolo.png",
+            "name": "Meio Cento 3",
+            "dsc":"Barquinha de camarão, Bolinho de bacalhau, Empanado de camarão",
+            "price": 27.50
+        },
     ],
-    "CentoDoces": [
+    "KitDoces": [
         {
             "id": "Tradicionais",
             "img": "/img/cardapio/Bolos/monteseubolo.png",
@@ -550,7 +579,7 @@ var MENU = {
             "id": "CREMEDECAMARAO",
             "img": "/img/cardapio/Natal/CREMEDECAMARAO1.png",
             "name": "CREME DE CAMARÃO",
-            "dsc": "CREME DE CAMARÃO",
+            "dsc": "Limite 2 Litros",
             "price": 100.00
         },
 
