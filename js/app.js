@@ -76,7 +76,8 @@ cardapio.metodos = {
     let qntdAtual = parseInt($("#qntd-" + id).text());
 
     if (qntdAtual > min) {
-      $("#qntd-" + id).text(qntdAtual - 1);
+      let unidade = cardapio.metodos.getUnidade(item);
+      $("#qntd-" + id).text((qntdAtual - 1) + unidade);
     } else if (min > 0) {
       cardapio.metodos.mensagem(`Já está no valor mínimo (${min}) para este item.`, "red");
     }
@@ -84,9 +85,16 @@ cardapio.metodos = {
 
   // Aumentar a quantidade do item no cardápio
   aumentarQuantidade: (id) => {
+    // Busca o item no MENU
+    let item = null;
+    $.each(MENU, (categoria, itens) => {
+      itens.forEach(e => { if(e.id == id) item = e; });
+    });
+
     let qntdAtual = parseInt($("#qntd-" + id).text());
+    let unidade = cardapio.metodos.getUnidade(item);
     if (qntdAtual >= 0) {
-      $("#qntd-" + id).text(qntdAtual + 1);
+      $("#qntd-" + id).text((qntdAtual + 1) + unidade);
     }
   },
 
@@ -119,7 +127,14 @@ cardapio.metodos = {
         "height": "90%"
       }))
       $(".info-product-price").text("R$ " + itemEncontrado.price.toFixed(2));
-      let tempButtons = cardapio.templates.buttonsItem.replace(/\${id}/g, itemEncontrado.id)
+      let unidade = "und";
+      let dsc = (itemEncontrado.dsc || "").toLowerCase();
+      if (dsc.includes("litro")) unidade = "L";
+      else if (dsc.includes("kg") || dsc.includes("quilo")) unidade = "kg";
+
+      let tempButtons = cardapio.templates.buttonsItem
+        .replace(/\${id}/g, itemEncontrado.id)
+        .replace(/\${unidade}/g,unidade);
       $(".info-product-qntd").html(tempButtons)
       if(isBolo){
         cardapio.metodos.pegarTemplateBolo()
@@ -173,10 +188,17 @@ cardapio.metodos = {
           }
         });
         if(itemEncontrado.min){
-          $("#qntd-" + itemEncontrado.id).text(itemEncontrado.min);
+          $("#qntd-" + itemEncontrado.id).text(itemEncontrado.min + cardapio.metodos.getUnidade(itemEncontrado));
         }
       }
     }
+  },
+
+  getUnidade: (item) => {
+    let dsc = (item.dsc || "").toLowerCase();
+    if (dsc.includes("litro")) return "L";
+    if (dsc.includes("kg") || dsc.includes("quilo")) return "kg";
+    return "und";
   },
 
   pegarTemplateBolo: () => {
@@ -530,6 +552,12 @@ cardapio.metodos = {
           </div>`;
       }
 
+      // Exemplo para carregarCarrinho e carregarResumo
+      let unidade = "und";
+      let dsc = (e.dsc || "").toLowerCase();
+      if (dsc.includes("litro")) unidade = "L";
+      else if (dsc.includes("kg") || dsc.includes("quilo")) unidade = "kg";
+
       // Renderiza o item no carrinho usando o template
       let temp = cardapio.templates.itemCarrinho
         .replace(/\${img}/g, e.img)
@@ -537,7 +565,8 @@ cardapio.metodos = {
         .replace(/\${preco}/g, e.price.toFixed(2).replace('.', ','))
         .replace(/\${id}/g, e.id)
         .replace(/\${qntd}/g, e.qntd)
-        .replace(/\${adicionais}/g, tempAdicionais); // Aqui entra o dropdown
+        .replace(/\${unidade}/g, unidade)
+        .replace(/\${adicionais}/g, tempAdicionais);
 
       $("#itensCarrinho").append(temp);
 
@@ -553,9 +582,10 @@ cardapio.metodos = {
   //Diminuir Quantidade do Item no carrinho
   diminuirQuantidadeCarrinho: (id) => {
     let qntdAtual = parseInt($("#qntd-carrinho-" + id).text());
-
+    let item = MEU_CARRINHO.find(e => e.id === id);
+    let unidade = cardapio.metodos.getUnidade(item);
     if (qntdAtual > 1) {
-      $("#qntd-carrinho-" + id).text(qntdAtual - 1);
+      $("#qntd-carrinho-" + id).text((qntdAtual - 1) + unidade);
       cardapio.metodos.atualizarCarrinho(id, qntdAtual - 1)
     }else{
       cardapio.metodos.removerItemCarrinho(1)
@@ -565,7 +595,9 @@ cardapio.metodos = {
   //Diminuir quantidade do item no carrinho
   aumentarQuantidadeCarrinho: (id) => {
     let qntdAtual = parseInt($("#qntd-carrinho-" + id).text());
-    $("#qntd-carrinho-" + id).text(qntdAtual + 1);
+    let item = MEU_CARRINHO.find(e => e.id === id);
+    let unidade = cardapio.metodos.getUnidade(item);
+    $("#qntd-carrinho-" + id).text((qntdAtual + 1) + unidade);
     cardapio.metodos.atualizarCarrinho(id, qntdAtual + 1)
   },
 
@@ -613,10 +645,16 @@ cardapio.metodos = {
     $("#listaItensResumo").html("");
 
     $.each(MEU_CARRINHO, (i, e) => {
+    let unidade = "und";
+    let dsc = (e.dsc || "").toLowerCase();
+    if (dsc.includes("litro")) unidade = "L";
+    else if (dsc.includes("kg") || dsc.includes("quilo")) unidade = "kg";
+
       let temp = cardapio.templates.itemResumo.replace(/\${img}/g, e.img)
         .replace(/\${nome}/g, e.name)
         .replace(/\${preco}/g, e.price.toFixed(2).replace('.', ','))
-        .replace(/\${qntd}/g, e.qntd);
+        .replace(/\${qntd}/g, e.qntd)
+        .replace(/\${unidade}/g, unidade);
 
       $("#listaItensResumo").append(temp);
     });
@@ -635,6 +673,7 @@ cardapio.metodos = {
     
     $.each(MEU_CARRINHO, (i, e) => {
       // Detecta se é cento ou meio cento
+      let typeProduct = cardapio.metodos.getUnidade(e);
       let nome = (e.name || "").toLowerCase();
       let qtdTexto = "";
       if (
@@ -649,7 +688,7 @@ cardapio.metodos = {
       ) {
         qtdTexto = " (100 unidades)";
       }
-      texto += `\n🍽️ *${e.qntd}x ${e.name}${qtdTexto}* - R$ ${(e.price * e.qntd).toFixed(2).replace('.', ',')}\n`;
+      texto += `\n🍽️ *${e.qntd}${typeProduct} ${e.name}${qtdTexto}* - R$ ${(e.price * e.qntd).toFixed(2).replace('.', ',')}\n`;
       if (e.adicionais && e.adicionais.length > 0) {
         texto += `   ┌───────────────────\n`;
         e.adicionais.forEach(adicional => {
@@ -747,7 +786,7 @@ cardapio.templates = {
 
   buttonsItem: `
     <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidade('\${id}')"><i class="fas fa-minus"></i></span>
-    <span class="add-numero-itens" id="qntd-\${id}">0</span>
+    <span class="add-numero-itens" id="qntd-\${id}">0\${unidade}</span>
     <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidade('\${id}')"><i class="fas fa-plus"></i></span>
   `,
 
@@ -792,7 +831,7 @@ cardapio.templates = {
       <strong class="titleAdicionalBolo">Informe a Quantidade:</strong>
       <div>
         <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeBrigadeiros()"><i class="fas fa-minus"></i></span>
-        <span class="add-numero-itens" id="qntd-brigadeiros"" >0</span>
+        <span class="add-numero-itens" id="qntd-brigadeiros">0</span>
         <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidadeBrigadeiros()"><i class="fas fa-plus"></i></span>
       </div>
     </div>
@@ -812,14 +851,14 @@ cardapio.templates = {
       </div>
       <div class="add-carrinho">
       <span class="btn-menos" onclick="cardapio.metodos.diminuirQuantidadeCarrinho('\${id}')"><i class="fas fa-minus"></i></span>
-        <span class="add-numero-itens" id="qntd-carrinho-\${id}">\${qntd}</span>
-        <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidadeCarrinho('\${id}')"><i class="fas fa-plus"></i></span>
-        <span class="btn btn-remove" onclick="cardapio.metodos.removerItemCarrinho('\${id}')"><i class="fa fa-times"></i></span>
+      <span class="add-numero-itens" id="qntd-carrinho-\${id}">\${qntd}\${unidade}</span>
+      <span class="btn-mais" onclick="cardapio.metodos.aumentarQuantidadeCarrinho('\${id}')"><i class="fas fa-plus"></i></span>
+      <span class="btn btn-remove" onclick="cardapio.metodos.removerItemCarrinho('\${id}')"><i class="fa fa-times"></i></span>
       </div>
     </div>
   `,
 
-   itemResumo: `
+  itemResumo: `
       <div class="col-12 item-carrinho resumo">
         <div class="img-produto-resumo">
           <img src="\${img}" alt="">
@@ -833,7 +872,7 @@ cardapio.templates = {
           </p>
         </div>
         <p class="quantidade-produto-resumo">
-          x <b>\${qntd}</b>
+          <b>\${qntd}\${unidade}</b>
         </p>
       </div>
    `
